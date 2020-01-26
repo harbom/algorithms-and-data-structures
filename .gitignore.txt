@@ -1,4 +1,4 @@
 .idea/
-*algorithms-and-data-structures.iml
+*.iml
 *.xml
 *.class

@@ -2,15 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a3dd8047-d4fe-40a5-9b81-f988938cef25" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/sorts.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore.txt" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/algorithms-and-data-structures/sorts.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/algorithms-and-data-structures/sorts.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/sorts.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/sorts.java" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="algorithms" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
