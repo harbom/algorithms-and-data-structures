@@ -8,7 +8,8 @@ public class sorts
     public static void main(String[] args)
     {
         initializeArray();
-        insertionSort_iterative();
+        //insertionSort_iterative();
+        //mergeSort_recursive(arr,0,arrSize-1);
     }
 
     private static void initializeArray()
@@ -46,4 +47,61 @@ public class sorts
     private static void insertionSort_recursive()
     {
     }
+
+    //takes two presorted arrays and merges them
+    // A is the array, p is start of subarray, r is end of subarray, p <= q < r
+    private static void merge(int[] A, int p, int q, int r)
+    {
+        int n1 = q-p+1; //length of left subarray
+        int n2 = r-q; //length of right subarray
+
+        //create arrays L[1..n1 + 1], R[1..n2+1]
+        int[] L = new int[n1+1];
+        int[] R = new int[n2+1];
+        for (int i = 0; i < n1; i++) //add elements to left array
+        {
+            L[i] = A[p+i];
+        }
+        for (int j = 0; j < n2; j++) //add elements to right array
+        {
+            R[j] = A[q+j+1];
+        }
+
+        //create sentinels: once method reaches these, the other one will always be looked at
+        // as integer.max value > anything else
+        L[L.length-1] = Integer.MAX_VALUE;
+        R[R.length-1] = Integer.MAX_VALUE;
+
+        int i = 0; int j = 0; //i is left iterator, j is right iterator
+        for (int k = p; k <= r; k++) //k = start index to end index (r)
+        {
+            if (L[i] <= R[j]) //if left at i < right at j
+            {
+                A[k] = L[i]; //assign the least element to A at position k
+                i++; //move up on the left array
+            } else
+            {
+                A[k] = R[j]; //assign the least element to A at position k
+                j++; //move up on the right array
+            }
+        }
+    }
+
+    /*should take O(n*log(n))
+    think recursion tree, splits an array into halves of the previous half of the array until
+     the length of each array is 1, then combines them back up to a sorted array
+    downfall is the space needed to create so many arrays*/
+    private static void mergeSort_recursive(int[] A, int p, int r)
+    {
+        if (p<r) //will terminate once each p = r = 1
+        {
+            int q = (p+r)/2; //cut array into half
+            mergeSort_recursive(A,p,q); //sort the left half at this point
+            mergeSort_recursive(A,q+1,r); //sort the right half at this point
+            merge(A,p,q,r); //take the product of the recursion from both sides and merge them
+        }
+
+        System.out.println("current: " + Arrays.toString(A));
+    }
+
 }

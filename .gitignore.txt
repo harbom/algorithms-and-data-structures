@@ -1,4 +1,6 @@
 .idea/
+.idea
+.idea/*
 *.iml
 *.xml
 *.class
