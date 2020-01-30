@@ -1,3 +1,5 @@
+import com.sun.source.tree.Tree;
+
 import java.util.Arrays;
 
 //sorting algorithms such as insertion sort and merge sort
@@ -103,5 +105,64 @@ public class sorts
         }
 
         System.out.println("current: " + Arrays.toString(A));
+    }
+}
+
+class HeapBST
+{
+    public static int[] arr = {};
+    public static int heapSize = 0;
+    public static int arraySize = arr.length;
+
+    public HeapBST(int[] arr)
+    {
+        this.arr = arr;
+        heapSize = arr.length;
+        arraySize=arr.length;
+    }
+
+    /*maintains max heapify property: for all index i, parent[i] >= arr[i]
+    does this by starting at i, comparing its left/right children, and exchanging
+    array values and having the least value 'float' down to the leaves through recursion*/
+    public static void maxHeapify(int i)
+    {
+        int largest;
+        int l = left(i);
+        int r = right(i);
+        if (l <= heapSize && arr[i] > arr[l]) //pick largest of r, l, and i
+            largest = i;
+        else
+            largest = (arr[r] > arr[l]) ? r : l;
+
+        if (largest != i) //if the max-heap condition is not satisfied
+        {
+            //exchange arr[i] and arr[largest]
+            int i_val = arr[i];
+            arr[i] = arr[largest];
+            arr[largest] = i_val;
+
+            maxHeapify(largest); //recurse down to next subtree to put things in order
+        }
+    }
+
+    //returns index of parent node in heap BST
+    public static int parent(int i) { return (int)Math.floor(i/2); }
+    //returns left child of node in heap BST
+    public static int left(int i) { return (int)Math.floor(2*i); }
+    //returns right child of node in heap BST
+    public static int right (int i) { return (int)Math.floor(2*i +1); }
+}
+
+class Node
+{
+    public static int num;
+    public static Node left;
+    public static Node right;
+
+    public Node(int num)
+    {
+        this.num = num;
+        left = null;
+        right = null;
     }
 }
