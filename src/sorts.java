@@ -11,7 +11,8 @@ public class sorts
     {
         initializeArray();
         //insertionSort_iterative();
-        mergeSort_recursive(arr,0,arrSize-1);
+        //mergeSort_recursive(arr,0,arrSize-1);
+        buildMaxHeap(arr);
     }
 
     private static void initializeArray()
@@ -106,51 +107,97 @@ public class sorts
 
         System.out.println("current: " + Arrays.toString(A));
     }
+
+    //builds a heap based off of the array
+    private static void buildMaxHeap(int[] array)
+    {
+        //elements A[ (floor)(n/2 )..n-1] are all leaves, so start from nodes before that and recurse down the tree to the leaves
+        int n = array.length;
+        HeapBST heap = new HeapBST(arr);
+        heap.heapSize = n;
+        for (int i = (int)Math.floor(n/2)-1; i>= 0; i--)
+        {
+            heap.maxHeapify(arr,i);
+        }
+
+        System.out.println("after end: " + Arrays.toString(array));
+    }
 }
 
 class HeapBST
 {
-    public static int[] arr = {};
+    //public static int[] arr = {};
     public static int heapSize = 0;
-    public static int arraySize = arr.length;
 
     public HeapBST(int[] arr)
     {
-        this.arr = arr;
         heapSize = arr.length;
-        arraySize=arr.length;
     }
 
     /*maintains max heapify property: for all index i, parent[i] >= arr[i]
     does this by starting at i, comparing its left/right children, and exchanging
     array values and having the least value 'float' down to the leaves through recursion*/
-    public static void maxHeapify(int i)
+    public static void maxHeapify(int[] array, int i)
     {
+        //System.out.println("start of maxheapify: " + Arrays.toString(array) + "\ncurr i: " + i);
         int largest;
         int l = left(i);
         int r = right(i);
-        if (l <= heapSize && arr[i] > arr[l]) //pick largest of r, l, and i
-            largest = i;
-        else
-            largest = (arr[r] > arr[l]) ? r : l;
-
-        if (largest != i) //if the max-heap condition is not satisfied
+        int currValue = array[i];
+        int leftValue = 0;
+        int rightValue = 0;
+        if (l >= array.length)
         {
-            //exchange arr[i] and arr[largest]
-            int i_val = arr[i];
-            arr[i] = arr[largest];
-            arr[largest] = i_val;
-
-            maxHeapify(largest); //recurse down to next subtree to put things in order
+            leftValue = 0; //set it to be the lowest so it never gets touched: means that there is a leaf
+        } else
+        {
+            leftValue = array[l];
         }
+        if (r >= array.length)
+        {
+            rightValue = 0;//set it to be the lowest so it never gets touched: means that there is a leaf
+        } else
+        {
+            rightValue = array[r];
+        }
+
+        if (l <= heapSize && currValue > leftValue) //pick largest of l and i
+        {
+            //System.out.println("i is greater: A[i] is " + currValue + " and A[l] is " + leftValue);
+            largest = i;
+        } else
+        {
+            //System.out.println("l is greater: A[i] is " + currValue + " and A[l] is " + leftValue);
+            largest = l;
+        }
+        if (r <= heapSize && rightValue > array[largest]) //pick largest of r, l and i
+        {
+            //System.out.println("no, r is greater: : A[largest] is " + array[largest] + " and A[r] is " + rightValue);
+            largest = r;
+        }
+
+        //System.out.println("curr index: " + i + "\tlargest index: " + largest);
+        if (largest != i && largest < array.length) //if the max-heap condition is not satisfied
+        {
+            //System.out.println("time to exchange");
+            //exchange arr[i] and arr[largest]
+            int i_val = array[i];
+            array[i] = array[largest];
+            array[largest] = i_val;
+
+            //System.out.println("on to the next recursion level\n");
+            maxHeapify(array,largest); //recurse down to next subtree to put things in order
+        }
+
+        //System.out.println("end of maxHeapify: " + Arrays.toString(array) + "\n\n");
     }
 
     //returns index of parent node in heap BST
     public static int parent(int i) { return (int)Math.floor(i/2); }
     //returns left child of node in heap BST
-    public static int left(int i) { return (int)Math.floor(2*i); }
+    public static int left(int i) { return (int)Math.floor(2*i+1); }
     //returns right child of node in heap BST
-    public static int right (int i) { return (int)Math.floor(2*i +1); }
+    public static int right (int i) { return (int)Math.floor(2*i +2); }
 }
 
 class Node
