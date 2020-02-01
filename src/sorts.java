@@ -1,5 +1,3 @@
-import com.sun.source.tree.Tree;
-
 import java.util.Arrays;
 
 //sorting algorithms such as insertion sort and merge sort
@@ -12,7 +10,7 @@ public class sorts
         initializeArray();
         //insertionSort_iterative();
         //mergeSort_recursive(arr,0,arrSize-1);
-        buildMaxHeap(arr);
+        heapSort(arr);
     }
 
     private static void initializeArray()
@@ -109,24 +107,51 @@ public class sorts
     }
 
     //builds a heap based off of the array
-    private static void buildMaxHeap(int[] array)
+    private static void buildMaxHeap(int[] array, HeapBST heap)
     {
         //elements A[ (floor)(n/2 )..n-1] are all leaves, so start from nodes before that and recurse down the tree to the leaves
-        int n = array.length;
-        HeapBST heap = new HeapBST(arr);
-        heap.heapSize = n;
-        for (int i = (int)Math.floor(n/2)-1; i>= 0; i--)
+        for (int i = (int)Math.floor(array.length/2)-1; i>= 0; i--)
         {
             heap.maxHeapify(arr,i);
         }
 
-        System.out.println("after end: " + Arrays.toString(array));
+        System.out.println("after build: " + Arrays.toString(array));
+    }
+
+    /* should take O(nlgn)
+    for all leaves until the second node (i--), the root is exchanged with A[i]. Then it cuts off that last node
+    by decrementing heap size and does max heapify to arrange heap for each root exchanged. Leads to decreasing
+    list as the root will be the highest
+     */
+    private static void heapSort(int[] array)
+    {
+        HeapBST heap = new HeapBST(array);
+        heap.heapSize = array.length;
+
+        //build max heap first
+        buildMaxHeap(array, heap);
+
+        //exchange root with A[i] for each i
+        for (int i = array.length-1; i >= 1; i--)
+        {
+            //exchange A[i] and A[0]
+            int rootVal = array[0];
+            array[0] = array[i];
+            array[i] = rootVal;
+
+            //decrement heap size so max heap condition is not broken
+            heap.heapSize -= 1;
+
+            //rearrange max heap to follow structure
+            heap.maxHeapify(array,0);
+        }
+
+        System.out.println("after heapsort: " + Arrays.toString(array));
     }
 }
 
 class HeapBST
 {
-    //public static int[] arr = {};
     public static int heapSize = 0;
 
     public HeapBST(int[] arr)
@@ -140,44 +165,31 @@ class HeapBST
     public static void maxHeapify(int[] array, int i)
     {
         //System.out.println("start of maxheapify: " + Arrays.toString(array) + "\ncurr i: " + i);
-        int largest;
+        int largest = i;
         int l = left(i);
         int r = right(i);
-        int currValue = array[i];
-        int leftValue = 0;
-        int rightValue = 0;
-        if (l >= array.length)
+
+        //System.out.println("heapSize: " + heapSize);
+        if (l < heapSize) //if its a leaf, will not do anything
         {
-            leftValue = 0; //set it to be the lowest so it never gets touched: means that there is a leaf
-        } else
-        {
-            leftValue = array[l];
-        }
-        if (r >= array.length)
-        {
-            rightValue = 0;//set it to be the lowest so it never gets touched: means that there is a leaf
-        } else
-        {
-            rightValue = array[r];
+            //pick largest of l and i
+            if (array[i] > array[l])
+                largest = i;
+            else
+                largest = l;
+            //System.out.println("i is greater: A[i] is " + currValue + " and A[l] is " + leftValue);
         }
 
-        if (l <= heapSize && currValue > leftValue) //pick largest of l and i
+        if (r < heapSize) //if its a leaf, will not do anything
         {
-            //System.out.println("i is greater: A[i] is " + currValue + " and A[l] is " + leftValue);
-            largest = i;
-        } else
-        {
-            //System.out.println("l is greater: A[i] is " + currValue + " and A[l] is " + leftValue);
-            largest = l;
-        }
-        if (r <= heapSize && rightValue > array[largest]) //pick largest of r, l and i
-        {
+            //pick largest of r, l and i
+            if (array[r] > array[largest])
+                largest = r;
             //System.out.println("no, r is greater: : A[largest] is " + array[largest] + " and A[r] is " + rightValue);
-            largest = r;
         }
 
         //System.out.println("curr index: " + i + "\tlargest index: " + largest);
-        if (largest != i && largest < array.length) //if the max-heap condition is not satisfied
+        if (largest != i) //if the max-heap condition is not satisfied
         {
             //System.out.println("time to exchange");
             //exchange arr[i] and arr[largest]
@@ -198,18 +210,4 @@ class HeapBST
     public static int left(int i) { return (int)Math.floor(2*i+1); }
     //returns right child of node in heap BST
     public static int right (int i) { return (int)Math.floor(2*i +2); }
-}
-
-class Node
-{
-    public static int num;
-    public static Node left;
-    public static Node right;
-
-    public Node(int num)
-    {
-        this.num = num;
-        left = null;
-        right = null;
-    }
 }
