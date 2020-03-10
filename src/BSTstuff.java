@@ -1,13 +1,15 @@
 public class BSTstuff {
     public static void main(String[] args)
     {
-        Node root = createNewNode(0);
-        insert(root,1);
-        insert(root,5);
-        insert(root,4);
-        insert(root,3);
-        insert(root,2);
-        inorderWalk(root);
+        Node root = createNewNode(12);
+        int[] vals = {5,18,2,9,15,10,17};
+        for (int i:vals)
+            insert(root,i);
+
+        //inorderWalk(root);
+        //preOrderWalk(root);
+        //postOrderWalk(root);
+        //treeSearch(root,2);
     }
 
     //creates/returns a node with default left/right/parent pointers
@@ -45,15 +47,60 @@ public class BSTstuff {
             tempParent.right=newNode;
     }
 
-    //walks through the tree 'in order'
+    //walks through the tree 'in order' : 'bottom' edge while arrow traces from root counterclockwise, back to root
     public static void inorderWalk(Node root)
     {
         if (root != null)
         {
             inorderWalk(root.left);
-            System.out.println(root.key);
+            printForNode(root);
             inorderWalk(root.right);
         }
+    }
+
+    // 'left' edge while arrow traces root counterclockwise, back to root
+    public static void preOrderWalk(Node root)
+    {
+        if (root != null)
+        {
+            printForNode(root);
+            preOrderWalk(root.left);
+            preOrderWalk(root.right);
+        }
+    }
+
+    // 'left' edge while arrow traces root counterclockwise, back to root
+    public static void postOrderWalk(Node root)
+    {
+        if (root != null)
+        {
+            postOrderWalk(root.left);
+            postOrderWalk(root.right);
+            postOrderWalk(root);
+        }
+    }
+
+    //searches a tree for a given value
+    public static Node treeSearch(Node root,int x)
+    {
+        if (root == null || root.key == x) //if node is null or the values match up, return it
+            return root;
+
+        if (root.key <= x) //if you need to move left, move to the left subtree
+            return treeSearch(root.left, x);
+
+        return treeSearch(root.right, x); //else, move to the right subtree
+    }
+
+    private static void printForNode(Node root)
+    {
+        System.out.println(root.key);
+        if (root.parent != null)
+            System.out.print("   currParent: " + root.parent.key);
+        if (root.left != null)
+            System.out.print("   currLeft: " + root.left.key);
+        if (root.right != null)
+            System.out.print("   currRight: " + root.right.key);
     }
 }
 
