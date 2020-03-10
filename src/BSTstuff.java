@@ -1,12 +1,13 @@
 public class BSTstuff {
     public static void main(String[] args)
     {
-        Node root = null;
+        Node root = createNewNode(0);
         insert(root,1);
-        insert(root,2);
-        insert(root,3);
-        insert(root,4);
         insert(root,5);
+        insert(root,4);
+        insert(root,3);
+        insert(root,2);
+        inorderWalk(root);
     }
 
     //creates/returns a node with default left/right/parent pointers
@@ -42,6 +43,17 @@ public class BSTstuff {
             tempParent.left=newNode;
         else //val needs to go on right
             tempParent.right=newNode;
+    }
+
+    //walks through the tree 'in order'
+    public static void inorderWalk(Node root)
+    {
+        if (root != null)
+        {
+            inorderWalk(root.left);
+            System.out.println(root.key);
+            inorderWalk(root.right);
+        }
     }
 }
 
