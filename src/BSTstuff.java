@@ -10,6 +10,7 @@ public class BSTstuff {
         //preOrderWalk(root);
         //postOrderWalk(root);
         //treeSearch(root,2);
+        //System.out.println(treeSucessor(root).key);
     }
 
     //creates/returns a node with default left/right/parent pointers
@@ -99,6 +100,46 @@ public class BSTstuff {
             root = (root.key<x) ? root.left:root.right;
 
         return root;
+    }
+
+    //returns max value of tree: keep going right from the root
+    public static Node treeMaximum(Node root)
+    {
+        Node temp = root;
+        while (temp.right != null)
+            temp = temp.right;
+        return temp;
+    }
+
+    //returns min value of tree: keep going left from the root
+    public static Node treeMinimum(Node root)
+    {
+        Node temp = root;
+        while (temp.left != null)
+            temp = temp.left;
+        return temp;
+    }
+    //returns the Node with the smallest value k such that k >= root.key
+    public static Node treeSucessor(Node root)
+    {
+        //2 cases: right subtree is not null, and right subtree is null (its a leaf, bit more complicated)
+
+        //case 1: right subtree is null, just return min of that subtree
+        if (root.right != null)
+            return treeMinimum(root.right);
+
+        //else, case 2: its a leaf. walk up the tree, setting x to its prev parent and parentX to its parent,    /^\
+        //until either parentX is null or x is to the left of parentX. due to the nature of a BST, once x       o
+        //is to the left, the parent will be the next largest                                                 /  \
+        Node parentX = root.parent;
+        Node tempX = root;
+        while (parentX != null && parentX.right.key==tempX.key) //while the parent node isn't null and the
+        {
+            tempX=parentX;
+            parentX=parentX.parent;
+        }
+
+        return parentX;
     }
 
     //just prints out current node, parent
