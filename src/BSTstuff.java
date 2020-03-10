@@ -83,7 +83,7 @@ public class BSTstuff {
     //searches a tree for a given value
     public static Node treeSearch(Node root,int x)
     {
-        if (root == null || root.key == x) //if node is null or the values match up, return it
+        if (root == null || root.key == x) //if values match up, return it. otherwise, if its null, the value isn't in the tree (prem convo remember)
             return root;
 
         if (root.key <= x) //if you need to move left, move to the left subtree
@@ -92,15 +92,26 @@ public class BSTstuff {
         return treeSearch(root.right, x); //else, move to the right subtree
     }
 
+    //iterative way of previous method
+    public static Node iterativeTreeSearch(Node root, int x)
+    {
+        while (root != null || root.key==x)
+            root = (root.key<x) ? root.left:root.right;
+
+        return root;
+    }
+
+    //just prints out current node, parent
     private static void printForNode(Node root)
     {
-        System.out.println(root.key);
-        if (root.parent != null)
+        if (root != null)
+        {
+            System.out.print("currNode: " + root.key);
             System.out.print("   currParent: " + root.parent.key);
-        if (root.left != null)
             System.out.print("   currLeft: " + root.left.key);
-        if (root.right != null)
             System.out.print("   currRight: " + root.right.key);
+        }
+        System.out.println();
     }
 }
 
