@@ -1,16 +1,21 @@
 public class BSTstuff {
+    private static Node root;
     public static void main(String[] args)
     {
-        Node root = createNewNode(12);
+        root = createNewNode(12);
         int[] vals = {5,18,2,9,15,10,17};
         for (int i:vals)
             insert(root,i);
 
-        //inorderWalk(root);
+        System.out.println("before: ");
+        inorderWalk(root);
         //preOrderWalk(root);
         //postOrderWalk(root);
         //treeSearch(root,2);
         //System.out.println(treeSucessor(root).key);
+        System.out.println("after: ");
+        delete(root);
+        inorderWalk(root);
     }
 
     //creates/returns a node with default left/right/parent pointers
@@ -46,6 +51,42 @@ public class BSTstuff {
             tempParent.left=newNode;
         else //val needs to go on right
             tempParent.right=newNode;
+    }
+
+    //deletes a node from the tree
+    public static void delete(Node node)
+    {
+        //3 cases: (1) the node is a leaf, (2) the node has only one branch and can be spliced out
+        // or (3) the node has two branches and tree_successor must be used to balance it out
+
+        //case 1: node is a leaf, just cut relation off with parent(node)
+        if (node.left==null && node.right==null)
+        {
+            if (node.parent.right == node)
+                node.parent.right = null;
+            else
+                node.parent.left = null;
+            node.parent=null;
+
+            return;
+        } else if (node.left==null && node.right !=null) //case 2: node has only one child: circumvent it
+        {
+            node.parent.right = node.right; //set the right connection of the node's parent to the right subtree
+            node.right.parent=node.parent; //then, set the parent of the right subtree to the node's parent
+            node.parent=null; //sever connections
+            node.right=null; //sever connections
+            return;
+        } else if (node.right==null && node.left != null)
+        {
+            node.parent.left = node.left; //set the left connection of the node's parent to the left subtree
+            node.left.parent=node.parent; //then, set the parent of the left subtree to the node's parent
+            node.parent=null; //sever connections
+            node.left=null; //sever connections
+            return;
+        } else //case 3: have to do logic
+        {
+            Node successor = treeSucessor(node);
+        }
     }
 
     //walks through the tree 'in order' : 'bottom' edge while arrow traces from root counterclockwise, back to root
@@ -148,9 +189,12 @@ public class BSTstuff {
         if (root != null)
         {
             System.out.print("currNode: " + root.key);
-            System.out.print("   currParent: " + root.parent.key);
-            System.out.print("   currLeft: " + root.left.key);
-            System.out.print("   currRight: " + root.right.key);
+            if (root.parent != null)
+                System.out.print("   currParent: " + root.parent.key);
+            if (root.left != null)
+                System.out.print("   currLeft: " + root.left.key);
+            if (root.right != null)
+                System.out.print("   currRight: " + root.right.key);
         }
         System.out.println();
     }
@@ -161,3 +205,45 @@ class Node
     int key;
     Node left,right,parent;
 }
+
+
+/* CLRS delete node below
+//deletes a node from the tree
+    public static Node delete(Node node)
+    {
+        //3 cases: (1) the node is a leaf, (2) the node has only one branch and can be spliced out
+        // or (3) the node has two branches and tree_successor must be used to balance it out
+
+        Node y = null;
+        if (node.left == null || node.right == null)
+            y = node;
+        else
+            y = treeSucessor(node);
+
+        Node x = null;
+        if (y.left != null)
+            x=y.left;
+        else
+            x=y.right;
+
+        if (x != null)
+            x.parent = y.parent;
+        if (y.parent == null)
+        {
+            Node rootNode = root(node);
+            rootNode=x;
+        } else if (y.key == y.parent.left.key)
+            y.parent.left = x;
+        else
+            y.parent.right=x;
+
+        if (y.key != node.key)
+        {
+            node.key=y.key;
+            node.parent=y.parent;
+            node.right=y.right;
+            node.left=y.left;
+        }
+        return y;
+    }
+*/
