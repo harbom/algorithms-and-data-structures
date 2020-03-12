@@ -7,15 +7,17 @@ public class BSTstuff {
         for (int i:vals)
             insert(root,i);
 
-        System.out.println("before: ");
-        inorderWalk(root);
+        //System.out.println("before: ");
+        //inorderWalk(root);
         //preOrderWalk(root);
         //postOrderWalk(root);
         //treeSearch(root,2);
         //System.out.println(treeSucessor(root).key);
-        System.out.println("after: ");
-        delete(root);
-        inorderWalk(root);
+        //System.out.println("after: ");
+        //deleteKey(17);
+        //deleteKey(2);
+        //deleteKey(5);
+        //inorderWalk(root);
     }
 
     //creates/returns a node with default left/right/parent pointers
@@ -53,40 +55,46 @@ public class BSTstuff {
             tempParent.right=newNode;
     }
 
-    //deletes a node from the tree
-    public static void delete(Node node)
+    //calls recursive function to delete the node
+    static void deleteKey(int key)
     {
-        //3 cases: (1) the node is a leaf, (2) the node has only one branch and can be spliced out
-        // or (3) the node has two branches and tree_successor must be used to balance it out
+        root = deleteRec(root,key);
+    }
 
-        //case 1: node is a leaf, just cut relation off with parent(node)
-        if (node.left==null && node.right==null)
-        {
-            if (node.parent.right == node)
-                node.parent.right = null;
-            else
-                node.parent.left = null;
-            node.parent=null;
+    //does the deleting
+    public static Node deleteRec(Node root, int key)
+    {
+        //Base case: tree empty, return the root
+        if (root==null) return root;
 
-            return;
-        } else if (node.left==null && node.right !=null) //case 2: node has only one child: circumvent it
+        //otherwise, recur down the tree
+        if (key<root.key)
+            root.left=deleteRec(root.left,key);
+        else if (key>root.key)
+            root.right=deleteRec(root.right,key);
+        else //if the key is the same, needs to be deleted
         {
-            node.parent.right = node.right; //set the right connection of the node's parent to the right subtree
-            node.right.parent=node.parent; //then, set the parent of the right subtree to the node's parent
-            node.parent=null; //sever connections
-            node.right=null; //sever connections
-            return;
-        } else if (node.right==null && node.left != null)
-        {
-            node.parent.left = node.left; //set the left connection of the node's parent to the left subtree
-            node.left.parent=node.parent; //then, set the parent of the left subtree to the node's parent
-            node.parent=null; //sever connections
-            node.left=null; //sever connections
-            return;
-        } else //case 3: have to do logic
-        {
-            Node successor = treeSucessor(node);
+            /*at this point, there are 3 possibilities: since its not a leaf (above checks),
+            either it has 2 children or one child. if the left is null, the right won't be, vice versa,
+            OR it has 2 children.
+
+            In the first two cases (1 child), just copy child data over to the node
+            and you're good. Else, find the inorder successor and copy over that data to its right (again... due
+            to structure of binary tree)
+             */
+            //node with 0 or 1 children
+            if (root.left==null)
+                return root.right; //then make the node become the value of the right subtree (circumvents/deletes curr node)
+            else if (root.right==null)
+                return root.left; //same thing but w left subtree
+
+            //else, has multiple children
+            root.key=treeSucessor(root).key; //makes val of the curr root the inorder successor
+            root.right=deleteRec(root.right,root.key); //recurses down the right subtree so that when it meets the
+            //node with the inorder successor, it deletes that node. aka the inorder successor node 'moved up' to the curr node
         }
+
+        return root;
     }
 
     //walks through the tree 'in order' : 'bottom' edge while arrow traces from root counterclockwise, back to root
@@ -207,7 +215,7 @@ class Node
 }
 
 
-/* CLRS delete node below
+/* CLRS delete node below, doesn't seem to be working. I probably messed up pointer stuff near the end
 //deletes a node from the tree
     public static Node delete(Node node)
     {
