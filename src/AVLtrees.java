@@ -6,6 +6,12 @@ class AVLNode
 {
     int key, height;
     AVLNode left,right,parent;
+
+    AVLNode(int key)
+    {
+        this.key = key;
+        height=1;
+    }
 }
 
 public class AVLtrees
@@ -15,7 +21,8 @@ public class AVLtrees
     public static void main(String[] args)
     {
         AVLtrees tree = new AVLtrees();
-        root.parent=null;
+
+        testLeftRotate();
     }
 
     //returns the height (max len of the path from that node to a leaf) of the node
@@ -26,7 +33,7 @@ public class AVLtrees
     }
 
     //rotates a node and its position in the tree to the left
-    private void CLRSleftRotate(AVLNode x)
+    private static void CLRSleftRotate(AVLNode x)
     {
         /*for example, use this graphic:
               y                *x*
@@ -51,5 +58,49 @@ public class AVLtrees
 
         y.left=x;
         x.parent=y;
+    }
+
+    private static void testLeftRotate()
+    {
+        //test for the left rotate feature
+        /*
+                 4                                         2
+               2   5  --> leftRotate(2) should go to    1     4
+             1   3                                          3   5
+         */
+
+        AVLNode one = new AVLNode(1);
+        AVLNode two = new AVLNode(2);
+        AVLNode three = new AVLNode(3);
+        AVLNode four = new AVLNode(4);
+        AVLNode five = new AVLNode(5);
+
+        root = four;
+        root.left = two;
+        root.right = five;
+        two.parent = root;
+        five.parent = root;
+        one.parent=two;
+        three.parent=two;
+        two.left=one;
+        two.right=three;
+
+        System.out.println("before: ");
+        inorderTransversal(root);
+        CLRSleftRotate(two);
+        System.out.println("after: ");
+        inorderTransversal(root);
+        //it worked for this example, the inorder property was preserved
+    }
+
+    //should always start out at root
+    private static void inorderTransversal(AVLNode r)
+    {
+        if (r != null)
+        {
+            inorderTransversal(r.left);
+            System.out.println(r.key);
+            inorderTransversal(r.right);
+        }
     }
 }
