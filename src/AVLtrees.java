@@ -23,18 +23,37 @@ public class AVLtrees
         AVLtrees tree = new AVLtrees();
 
         //to test the left and right rotate functions
-        testRotate();
+        //testRotate();
+
+        //testing insertion/maintenance of AVL properties
+        tree.root = tree.insert(tree.root, 10);
+        tree.root = tree.insert(tree.root, 20);
+        tree.root = tree.insert(tree.root, 30);
+        tree.root = tree.insert(tree.root, 40);
+        tree.root = tree.insert(tree.root, 50);
+        tree.root = tree.insert(tree.root, 25);
+
+        /* The constructed AVL Tree would be
+             30
+            /  \
+          20   40
+         /  \     \
+        10  25    50
+        */
+        inorderTransversal(tree.root); //worked, in order transversal was preserved
     }
 
     //returns the height (max len of the path from that node to a leaf) of the node
-    int height(AVLNode n)
+    //O(1): simply returning an attribute of the AVLNode
+    private static int height(AVLNode n)
     {
         if (n==null) return 0;
         return n.height;
     }
 
     //rotates a node and its position in the tree to the left
-    private static void CLRSleftRotate(AVLNode x)
+    //O(1): constant # of pointer changes
+    private static AVLNode CLRSleftRotate(AVLNode x)
     {
         /*for example, use this graphic:
               y                *x*
@@ -59,10 +78,13 @@ public class AVLtrees
 
         y.left=x;
         x.parent=y;
+
+        return y;
     }
 
     //basically, same code as above function but switched the .left's and .right's
-    private static void CLRSRightRotate(AVLNode x)
+    //O(1): constant # of pointer changes
+    private static AVLNode CLRSRightRotate(AVLNode x)
     {
 
         /*for example, use this graphic:
@@ -88,8 +110,11 @@ public class AVLtrees
 
         y.right=x;
         x.parent=y;
+
+        return y;
     }
 
+    //a method to test the CLRS rotation methods
     private static void testRotate()
     {
         //test for the left rotate feature
@@ -118,13 +143,14 @@ public class AVLtrees
         System.out.println("before: ");
         inorderTransversal(root);
         //CLRSleftRotate(two);
-        CLRSRightRotate(two);
+        //CLRSRightRotate(two);
         System.out.println("after: ");
         inorderTransversal(root);
         //it worked for this example, the inorder property was preserved
     }
 
     //should always start out at root
+    //O(n): goes through all nodes
     private static void inorderTransversal(AVLNode r)
     {
         if (r != null)
@@ -133,5 +159,88 @@ public class AVLtrees
             System.out.println(r.key);
             inorderTransversal(r.right);
         }
+    }
+
+    //getting the balance of any node: should always be -1, 0 or 1. if it's not,
+    //AVL property is violated
+    //O(height(n)): goes from that node to a leaf on the left and on the right
+    private static int getBalance(AVLNode n)
+    {
+        if (n == null) //return 0's for leaves
+            return 0;
+
+        //else, height(node) = height(node.left) - height(node.right)
+        return height(n.left) - height(n.right);
+    }
+
+    //inserts a node with the given key starting at the root
+    //O(lgn): look at notes why
+    private static AVLNode insert(AVLNode node, int key)
+    {
+        //if the root is null
+        if (node == null)
+            return (new AVLNode(key));
+
+        //1) find right position for the node
+        //normal insertion
+        if (key < node.key)
+            node.left = insert(node.left,key); //recurse to left
+        else if (key > node.key)
+            node.right = insert(node.right,key); //recurse to right
+
+        //2) check whether root is balanced
+        int balance = getBalance(node);
+
+        //remember, for each node, the height.left and height.right must be +- 1 in height
+        //if root is unbalanced, 4 cases
+
+        //case 1: 'left left', simple rotate right once if the new node is on the root's left
+        /*like this:
+                /
+             /
+          /
+          , just requires 1 rotate and that'll be good
+        */
+        if (balance > 1 && key < node.left.key)
+            return CLRSRightRotate(node);
+
+        //case 2: 'right right', simple left rotate once if the new node is on the root's right
+        /*like this:
+                \
+                    \
+                        \
+            , just requires 1 rotate and balance is restored
+         */
+        if (balance < -1 && key > node.right.key)
+            return CLRSleftRotate(node);
+
+        //case 3: 'left right': need to rotate twice (see notes)
+        /*like this:
+                 /
+               /
+                   \
+            , need to rotate twice
+         */
+        if (balance > 1 && key > node.left.key)
+        {
+            node.left = CLRSleftRotate(node.left);
+            return CLRSRightRotate(node);
+        }
+
+        //case 4: 'right left': need to rotate twice
+        /* like this:
+               \
+                    \
+                /
+            , need to rotate twice
+         */
+        if (balance < -1 && key < node.right.key)
+        {
+            node.right = CLRSRightRotate(node.right);
+            return CLRSleftRotate(node);
+        }
+
+        //else, if it's balanced
+        return node;
     }
 }
