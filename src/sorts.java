@@ -10,7 +10,8 @@ public class sorts
         initializeArray();
         //insertionSort_iterative();
         //mergeSort_recursive(arr,0,arrSize-1);
-        heapSort(arr);
+        //heapSort(arr);
+        countingSort(arr);
     }
 
     private static void initializeArray()
@@ -147,6 +148,40 @@ public class sorts
         }
 
         System.out.println("after heapsort: " + Arrays.toString(array));
+    }
+
+    //stable(duplicate nums go in same order as they came in) sorting algo with Omega(n)
+    private static void countingSort(int[] array)
+    {
+        //find max of array to set k, the length of the array of the positions array
+        int k = 0;
+        for (int i:array)
+            if (i>=k)
+                k=i;
+        //initialize positions array as a blank array of length k, going from 0 to k
+        int[] positions = new int[k+1];
+        //System.out.println("After initializing positions array: " + Arrays.toString(positions));
+
+        //step 1: make positions a counter array, where index i appears in array positions[i] times
+        for (int i:array)
+            positions[i]++;
+        //System.out.println("After making positions a counter array: " + Arrays.toString(positions));
+
+        //step 2: positions[i] should now hold the number of elements <= i
+        for (int i = 1; i < positions.length; i++)
+            positions[i] += positions[i-1];
+        //System.out.println("After the <= step: " + Arrays.toString(positions));
+
+        //starting from the front of the input array, assign element j to output[position[j]]. then,
+        //decrement position[j] so that if a duplicate occurs, the numbers are not overwritten, the next num goes backward
+        int[] output = new int[array.length+1];
+        for (int i = array.length-1; i >= 0; i--)
+        {
+            output[positions[array[i]]] = array[i];
+            positions[array[i]]--;
+        }
+
+        System.out.println("After counting sort: " + Arrays.toString(output));
     }
 }
 
