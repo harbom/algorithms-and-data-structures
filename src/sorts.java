@@ -11,7 +11,8 @@ public class sorts
         //insertionSort_iterative();
         //mergeSort_recursive(arr,0,arrSize-1);
         //heapSort(arr);
-        countingSort(arr);
+        //countingSort(arr);
+        radixCountingSort(arr,1);
     }
 
     private static void initializeArray()
@@ -182,6 +183,37 @@ public class sorts
         }
 
         System.out.println("After counting sort: " + Arrays.toString(output));
+    }
+
+    //look at above method for reference, created a diff method just for radix sort
+    private static void radixCountingSort(int[] array,int placevalue)
+    {
+        int range = 10;
+        int[] positions = new int[10];
+
+        //pigenholes each num into a bucket from 0-9, thats really the only modification from the above method
+
+        //assigned frequencies
+        for (int i = 0; i < array.length; i++)
+        {
+            int digit = (array[i] / placevalue) % range;
+            positions[digit]++;
+        }
+
+        //assign nums until that index
+        for (int i = 1; i < range; i++)
+            positions[i] += positions[i-1];
+
+        //assign to an output array
+        int[] output = new int[array.length];
+        for (int i = array.length-1; i >= 0; i--)
+        {
+            int digit = (array[i] / placevalue) % range;
+            output[positions[digit]-1] = array[i];
+            positions[digit]--;
+        }
+
+        System.out.println("After: " + Arrays.toString(output));
     }
 }
 
