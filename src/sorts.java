@@ -12,7 +12,9 @@ public class sorts
         //mergeSort_recursive(arr,0,arrSize-1);
         //heapSort(arr);
         //countingSort(arr);
-        radixCountingSort(arr,1);
+        //radixCountingSort(arr,1);
+        int[] radixTestArr = {329,457,657,839,436,720,355,24};
+        radixSort(radixTestArr);
     }
 
     private static void initializeArray()
@@ -186,7 +188,7 @@ public class sorts
     }
 
     //look at above method for reference, created a diff method just for radix sort
-    private static void radixCountingSort(int[] array,int placevalue)
+    private static int[] radixCountingSort(int[] array,int placevalue)
     {
         int range = 10;
         int[] positions = new int[10];
@@ -213,7 +215,36 @@ public class sorts
             positions[digit]--;
         }
 
-        System.out.println("After: " + Arrays.toString(output));
+        return output;
+    }
+
+    private static int getMax(int[] arr)
+    {
+        int max=0;
+        for (int i:arr) if (i>=max) max= i;
+        return max;
+    }
+
+    private static int getNumDigits(int i)
+    {
+        return Integer.toString(i).length();
+    }
+
+    //sorts least significant digit to most significant digit
+    //O(d(n+k)), where d is the max number of digits in the array. Can be O(n) if d and k are O(n)
+    private static void radixSort(int[] numbers)
+    {
+        int maxNum = getMax(numbers);
+        int numDigits = getNumDigits(maxNum);
+        int placeval = 1;
+        while (numDigits-- > 0)
+        {
+            numbers = radixCountingSort(numbers,placeval);
+            placeval *= 10;
+            System.out.println("Iteration: " + Arrays.toString(numbers));
+        }
+
+        System.out.println("Final: " + Arrays.toString(numbers));
     }
 }
 
