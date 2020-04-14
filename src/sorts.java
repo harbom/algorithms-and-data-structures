@@ -1,4 +1,6 @@
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 
 //sorting algorithms such as insertion sort and merge sort
 public class sorts
@@ -9,6 +11,7 @@ public class sorts
     {
         initializeArray();
         //bubbleSort();
+        bogoSort();
         //insertionSort_iterative();
         //mergeSort_recursive(arr,0,arrSize-1);
         //heapSort(arr);
@@ -46,6 +49,38 @@ public class sorts
         }
 
         System.out.println("after bubblesort: " + Arrays.toString(arr));
+    }
+
+    //VERY inneficient method of sorting
+    private static void bogoSort()
+    {
+        while(!isSorted(arr))
+        {
+            shuffle(arr);
+        }
+
+        System.out.println("after bogosort: " + Arrays.toString(arr));
+    }
+
+    private static boolean isSorted(int[] array)
+    {
+        for(int i = 0; i < array.length-1; i++)
+        {
+            if(array[i+1] < array[i])
+                return false;
+        }
+        return true;
+    }
+
+    private static void shuffle(int[] arr)
+    {
+        for (int i = 0; i < arr.length; i++)
+        {
+            int randomIndex = (int)(arr.length*Math.random());
+            int curr = arr[i];
+            arr[i] = arr[randomIndex];
+            arr[randomIndex] = curr;
+        }
     }
 
 
