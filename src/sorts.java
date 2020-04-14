@@ -8,13 +8,14 @@ public class sorts
     public static void main(String[] args)
     {
         initializeArray();
+        //bubbleSort();
         //insertionSort_iterative();
         //mergeSort_recursive(arr,0,arrSize-1);
         //heapSort(arr);
         //countingSort(arr);
         //radixCountingSort(arr,1);
         int[] radixTestArr = {329,457,657,839,436,720,355,24};
-        radixSort(radixTestArr);
+        //radixSort(radixTestArr);
     }
 
     private static void initializeArray()
@@ -27,6 +28,26 @@ public class sorts
 
         System.out.println("initial: " + Arrays.toString(arr));
     }
+
+    //very inneficient sorting, O(n^2)
+    private static void bubbleSort()
+    {
+        for (int i = 0; i < arrSize; i++)
+        {
+            for (int j = 0; j < arrSize && j != i; j++)
+            {
+                if (arr[j] > arr[i])
+                {
+                    int temp = arr[j];
+                    arr[j] = arr[i];
+                    arr[i] = temp;
+                }
+            }
+        }
+
+        System.out.println("after bubblesort: " + Arrays.toString(arr));
+    }
+
 
     /*should take O(n^2)
     arr[0,key-1] is presorted, that's the invariant. iterate through k and perform pairwise swaps to maintain
