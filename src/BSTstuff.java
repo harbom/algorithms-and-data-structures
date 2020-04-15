@@ -1,27 +1,34 @@
-public class BSTstuff {
-    private static Node root;
+public class BSTstuff
+{
     public static void main(String[] args)
     {
-        root = createNewNode(12);
+        BSTLibrary bst = new BSTLibrary();
+        bst.root = bst.createNewNode(12);
+        Node root = bst.root;
         int[] vals = {5,18,2,9,15,10,17};
         for (int i:vals)
-            insert(root,i);
+            bst.insert(root,i);
 
         //System.out.println("before: ");
-        //inorderWalk(root);
-        //preOrderWalk(root);
-        //postOrderWalk(root);
-        //treeSearch(root,2);
+        bst.inorderWalk(root);
+        //bst.preOrderWalk(root);
+        //bst.postOrderWalk(root);
+        //bst.treeSearch(root,2);
         //System.out.println(treeSucessor(root).key);
         //System.out.println("after: ");
-        //deleteKey(17);
-        //deleteKey(2);
-        //deleteKey(5);
-        //inorderWalk(root);
+        //bst.deleteKey(17);
+        //bst.deleteKey(2);
+        //bst.deleteKey(5);
+        //bst.inorderWalk(root);
     }
+}
+
+class BSTLibrary
+{
+    public Node root;
 
     //creates/returns a node with default left/right/parent pointers
-    public static Node createNewNode(int val)
+    public Node createNewNode(int val)
     {
         Node n = new Node();
         n.key = val;
@@ -32,7 +39,7 @@ public class BSTstuff {
     }
 
     //inserts a node with the given value to the tree
-    public static void insert(Node root, int val)
+    public void insert(Node root, int val)
     {
         Node newNode = createNewNode(val);
         Node tempParent=null;
@@ -56,13 +63,13 @@ public class BSTstuff {
     }
 
     //calls recursive function to delete the node
-    static void deleteKey(int key)
+    public void deleteKey(int key)
     {
         root = deleteRec(root,key);
     }
 
     //does the deleting
-    public static Node deleteRec(Node root, int key)
+    public Node deleteRec(Node root, int key)
     {
         //Base case: tree empty, return the root
         if (root==null) return root;
@@ -98,7 +105,7 @@ public class BSTstuff {
     }
 
     //walks through the tree 'in order' : 'bottom' edge while arrow traces from root counterclockwise, back to root
-    public static void inorderWalk(Node root)
+    public void inorderWalk(Node root)
     {
         if (root != null)
         {
@@ -109,7 +116,7 @@ public class BSTstuff {
     }
 
     // 'left' edge while arrow traces root counterclockwise, back to root
-    public static void preOrderWalk(Node root)
+    public void preOrderWalk(Node root)
     {
         if (root != null)
         {
@@ -120,7 +127,7 @@ public class BSTstuff {
     }
 
     // 'left' edge while arrow traces root counterclockwise, back to root
-    public static void postOrderWalk(Node root)
+    public void postOrderWalk(Node root)
     {
         if (root != null)
         {
@@ -131,7 +138,7 @@ public class BSTstuff {
     }
 
     //searches a tree for a given value
-    public static Node treeSearch(Node root,int x)
+    public Node treeSearch(Node root,int x)
     {
         if (root == null || root.key == x) //if values match up, return it. otherwise, if its null, the value isn't in the tree (prem convo remember)
             return root;
@@ -143,7 +150,7 @@ public class BSTstuff {
     }
 
     //iterative way of previous method
-    public static Node iterativeTreeSearch(Node root, int x)
+    public Node iterativeTreeSearch(Node root, int x)
     {
         while (root != null || root.key==x)
             root = (root.key<x) ? root.left:root.right;
@@ -152,7 +159,7 @@ public class BSTstuff {
     }
 
     //returns max value of tree: keep going right from the root
-    public static Node treeMaximum(Node root)
+    public Node treeMaximum(Node root)
     {
         Node temp = root;
         while (temp.right != null)
@@ -161,7 +168,7 @@ public class BSTstuff {
     }
 
     //returns min value of tree: keep going left from the root
-    public static Node treeMinimum(Node root)
+    public Node treeMinimum(Node root)
     {
         Node temp = root;
         while (temp.left != null)
@@ -169,7 +176,7 @@ public class BSTstuff {
         return temp;
     }
     //returns the Node with the smallest value k such that k >= root.key
-    public static Node treeSucessor(Node root)
+    public Node treeSucessor(Node root)
     {
         //2 cases: right subtree is not null, and right subtree is null (its a leaf, bit more complicated)
 
@@ -192,7 +199,7 @@ public class BSTstuff {
     }
 
     //just prints out current node, parent
-    private static void printForNode(Node root)
+    private void printForNode(Node root)
     {
         if (root != null)
         {
