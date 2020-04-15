@@ -1,27 +1,29 @@
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
 
-//sorting algorithms such as insertion sort and merge sort
 public class sorts
 {
-    private static int arrSize = 10;
-    private static int[] arr = new int[arrSize];
     public static void main(String[] args)
     {
-        initializeArray();
-        //bubbleSort();
-        bogoSort();
-        //insertionSort_iterative();
-        //mergeSort_recursive(arr,0,arrSize-1);
-        //heapSort(arr);
-        //countingSort(arr);
-        //radixCountingSort(arr,1);
+        SortsLibrary sorter = new SortsLibrary();
+        sorter.initializeArray();
+        //sorter.bubbleSort();
+        //sorter.bogoSort();
+        //sorter.insertionSort_iterative();
+        //sorter.mergeSort_recursive(sorter.arr,0,sorter.arrSize-1);
+        sorter.heapSort(sorter.arr);
+        //sorter.countingSort(sorter.arr);
+        //sorter.radixCountingSort(sorter.arr,1);
         int[] radixTestArr = {329,457,657,839,436,720,355,24};
-        //radixSort(radixTestArr);
+        //sorter.radixSort(radixTestArr);
     }
+}
+//sorting algorithms such as insertion sort and merge sort
+class SortsLibrary
+{
+    public int arrSize = 10;
+    public int[] arr = new int[arrSize];
 
-    private static void initializeArray()
+    public void initializeArray()
     {
         for (int i = 0; i < arrSize; i++)
         {
@@ -33,7 +35,7 @@ public class sorts
     }
 
     //very inneficient sorting, O(n^2)
-    private static void bubbleSort()
+    public void bubbleSort()
     {
         for (int i = 0; i < arrSize; i++)
         {
@@ -52,7 +54,7 @@ public class sorts
     }
 
     //VERY inneficient method of sorting
-    private static void bogoSort()
+    public void bogoSort()
     {
         while(!isSorted(arr))
         {
@@ -62,7 +64,7 @@ public class sorts
         System.out.println("after bogosort: " + Arrays.toString(arr));
     }
 
-    private static boolean isSorted(int[] array)
+    private boolean isSorted(int[] array)
     {
         for(int i = 0; i < array.length-1; i++)
         {
@@ -72,7 +74,7 @@ public class sorts
         return true;
     }
 
-    private static void shuffle(int[] arr)
+    private void shuffle(int[] arr)
     {
         for (int i = 0; i < arr.length; i++)
         {
@@ -87,7 +89,7 @@ public class sorts
     /*should take O(n^2)
     arr[0,key-1] is presorted, that's the invariant. iterate through k and perform pairwise swaps to maintain
     presorted array*/
-    private static void insertionSort_iterative()
+    public void insertionSort_iterative()
     {
         for (int key = 1; key < arrSize; key++) //iterate through key
         {
@@ -105,14 +107,14 @@ public class sorts
         System.out.println("insertion sort iterative: " + Arrays.toString(arr));
     }
 
-    private static void insertionSort_recursive()
+    public void insertionSort_recursive()
     {
     }
 
 
     //takes two presorted arrays and merges them
     // A is the array, p is start of subarray, r is end of subarray, p <= q < r
-    private static void merge(int[] A, int p, int q, int r)
+    private void merge(int[] A, int p, int q, int r)
     {
         int n1 = q-p+1; //length of left subarray
         int n2 = r-q; //length of right subarray
@@ -153,7 +155,7 @@ public class sorts
     think recursion tree, splits an array into halves of the previous half of the array until
      the length of each array is 1, then combines them back up to a sorted array
     downfall is the space needed to create so many arrays*/
-    private static void mergeSort_recursive(int[] A, int p, int r)
+    public void mergeSort_recursive(int[] A, int p, int r)
     {
         if (p<r) //will terminate once each p = r = 1
         {
@@ -167,7 +169,7 @@ public class sorts
     }
 
     //builds a heap based off of the array
-    private static void buildMaxHeap(int[] array, HeapBST heap)
+    private void buildMaxHeap(int[] array, HeapBST heap)
     {
         //elements A[ (floor)(n/2 )..n-1] are all leaves, so start from nodes before that and recurse down the tree to the leaves
         for (int i = (int)Math.floor(array.length/2)-1; i>= 0; i--)
@@ -183,7 +185,7 @@ public class sorts
     by decrementing heap size and does max heapify to arrange heap for each root exchanged. Leads to decreasing
     list as the root will be the highest
      */
-    private static void heapSort(int[] array)
+    public void heapSort(int[] array)
     {
         HeapBST heap = new HeapBST(array);
         heap.heapSize = array.length;
@@ -210,7 +212,7 @@ public class sorts
     }
 
     //stable(duplicate nums go in same order as they came in) sorting algo with Omega(n)
-    private static void countingSort(int[] array)
+    public void countingSort(int[] array)
     {
         //find max of array to set k, the length of the array of the positions array
         int k = 0;
@@ -244,7 +246,7 @@ public class sorts
     }
 
     //look at above method for reference, created a diff method just for radix sort
-    private static int[] radixCountingSort(int[] array,int placevalue)
+    public int[] radixCountingSort(int[] array,int placevalue)
     {
         int range = 10;
         int[] positions = new int[10];
@@ -274,21 +276,21 @@ public class sorts
         return output;
     }
 
-    private static int getMax(int[] arr)
+    private int getMax(int[] arr)
     {
         int max=0;
         for (int i:arr) if (i>=max) max= i;
         return max;
     }
 
-    private static int getNumDigits(int i)
+    private int getNumDigits(int i)
     {
         return Integer.toString(i).length();
     }
 
     //sorts least significant digit to most significant digit
     //O(d(n+k)), where d is the max number of digits in the array. Can be O(n) if d and k are O(n)
-    private static void radixSort(int[] numbers)
+    public void radixSort(int[] numbers)
     {
         int maxNum = getMax(numbers);
         int numDigits = getNumDigits(maxNum);
@@ -306,7 +308,7 @@ public class sorts
 
 class HeapBST
 {
-    public static int heapSize = 0;
+    public int heapSize = 0;
 
     public HeapBST(int[] arr)
     {
@@ -316,7 +318,7 @@ class HeapBST
     /*maintains max heapify property: for all index i, parent[i] >= arr[i]
     does this by starting at i, comparing its left/right children, and exchanging
     array values and having the least value 'float' down to the leaves through recursion*/
-    public static void maxHeapify(int[] array, int i)
+    public void maxHeapify(int[] array, int i)
     {
         //System.out.println("start of maxheapify: " + Arrays.toString(array) + "\ncurr i: " + i);
         int largest = i;
@@ -359,9 +361,9 @@ class HeapBST
     }
 
     //returns index of parent node in heap BST
-    public static int parent(int i) { return (int)Math.floor(i/2); }
+    public int parent(int i) { return (int)Math.floor(i/2); }
     //returns left child of node in heap BST
-    public static int left(int i) { return (int)Math.floor(2*i+1); }
+    public int left(int i) { return (int)Math.floor(2*i+1); }
     //returns right child of node in heap BST
-    public static int right (int i) { return (int)Math.floor(2*i +2); }
+    public int right (int i) { return (int)Math.floor(2*i +2); }
 }
