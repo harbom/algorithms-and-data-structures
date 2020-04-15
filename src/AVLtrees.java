@@ -1,29 +1,14 @@
 /*AVL trees are an effort to make more balanced binary trees: the max difference between the height (max length from that
 node to a leaf) between the left and right children is +- 1. height(node) = height(left)
 */
-
-class AVLNode
-{
-    int key, height;
-    AVLNode left,right,parent;
-
-    AVLNode(int key)
-    {
-        this.key = key;
-        height=1;
-    }
-}
-
 public class AVLtrees
 {
-    private static AVLNode root;
-
     public static void main(String[] args)
     {
-        AVLtrees tree = new AVLtrees();
+        AVLTreeLibrary tree = new AVLTreeLibrary();
 
         //to test the left and right rotate functions
-        //testRotate();
+        //tree.testRotate();
 
         //testing insertion/maintenance of AVL properties
         tree.root = tree.insert(tree.root, 10);
@@ -40,12 +25,29 @@ public class AVLtrees
          /  \     \
         10  25    50
         */
-        inorderTransversal(tree.root); //worked, in order transversal was preserved
+        tree.inorderTransversal(tree.root); //worked, in order transversal was preserved
     }
+}
+
+class AVLNode
+{
+    int key, height;
+    AVLNode left,right,parent;
+
+    AVLNode(int key)
+    {
+        this.key = key;
+        height=1;
+    }
+}
+
+class AVLTreeLibrary
+{
+    public AVLNode root;
 
     //returns the height (max len of the path from that node to a leaf) of the node
     //O(1): simply returning an attribute of the AVLNode
-    private static int height(AVLNode n)
+    private int height(AVLNode n)
     {
         if (n==null) return 0;
         return n.height;
@@ -53,7 +55,7 @@ public class AVLtrees
 
     //rotates a node and its position in the tree to the left
     //O(1): constant # of pointer changes
-    private static AVLNode CLRSleftRotate(AVLNode x)
+    private AVLNode CLRSleftRotate(AVLNode x)
     {
         /*for example, use this graphic:
               y                *x*
@@ -84,7 +86,7 @@ public class AVLtrees
 
     //basically, same code as above function but switched the .left's and .right's
     //O(1): constant # of pointer changes
-    private static AVLNode CLRSRightRotate(AVLNode x)
+    private AVLNode CLRSRightRotate(AVLNode x)
     {
 
         /*for example, use this graphic:
@@ -115,7 +117,7 @@ public class AVLtrees
     }
 
     //a method to test the CLRS rotation methods
-    private static void testRotate()
+    public void testRotate()
     {
         //test for the left rotate feature
         /*
@@ -151,7 +153,7 @@ public class AVLtrees
 
     //should always start out at root
     //O(n): goes through all nodes
-    private static void inorderTransversal(AVLNode r)
+    public void inorderTransversal(AVLNode r)
     {
         if (r != null)
         {
@@ -164,7 +166,7 @@ public class AVLtrees
     //getting the balance of any node: should always be -1, 0 or 1. if it's not,
     //AVL property is violated
     //O(height(n)): goes from that node to a leaf on the left and on the right
-    private static int getBalance(AVLNode n)
+    private int getBalance(AVLNode n)
     {
         if (n == null) //return 0's for leaves
             return 0;
@@ -175,7 +177,7 @@ public class AVLtrees
 
     //inserts a node with the given key starting at the root
     //O(lgn): look at notes why
-    private static AVLNode insert(AVLNode node, int key)
+    public AVLNode insert(AVLNode node, int key)
     {
         //if the root is null
         if (node == null)
