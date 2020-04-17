@@ -21,7 +21,7 @@ public class Hashing
 
 class HashingLibrary
 {
-    private int maxIndex = 50;
+    public static int maxIndex = 50;
     private int numObjects = 10;
     private List<exampleObject> objectList = new ArrayList();
     private exampleObject[] arr = new exampleObject[maxIndex];
@@ -90,7 +90,7 @@ class HashingLibrary
     public void chainedInsert(exampleObject x)
     {
         //need to insert each object at the tail of the linked list at that index in the hash table (tail rather than head so earlier occurrences appear earlier in the LL)
-        int key = x.key;
+        int key = hashCode(x.key); //returns itself, would be more complex if there was an actual application
 
         exampleObjectNode currLL = hashTableChaining[key];
         //currLL either has (prev,object,null) = (null,null,null) (initial state) or (something,object,null) (need to append it to the head).
@@ -141,7 +141,8 @@ class HashingLibrary
     //searching for a value should take O(1) **on average** (not worst case), you access/traverse the LL to find the object. else, return null
     public exampleObject chainedSearch(int k)
     {
-        exampleObjectNode LL = hashTableChaining[k];
+        int hashValue = hashCode(k);
+        exampleObjectNode LL = hashTableChaining[hashValue];
         if (LL.object == null) return null;
 
         //need to recurr backwards from the tail
@@ -157,16 +158,22 @@ class HashingLibrary
 
     public void testChainedSearch()
     {
+        System.out.println("test chained search");
         int randomKey = (int)(Math.random()*maxIndex);
-        System.out.println(randomKey);
-        exampleObject result = chainedSearch(randomKey);
+        System.out.println("randomKey: " + randomKey);
+        exampleObject result = chainedSearch(randomKey); //this method hashes a given key so you dont need to hash it again
+
         if (result == null)
             System.out.print("not in hashtable");
         else
             System.out.print("success: " + result);
-
-        hashCode();
     }
+
+    //custom implementation of the hashing function. since this is just an integer i'll just return the integer
+    //im not overriding because its not a java thing tied to a class, this is more of a function to take in a key and return its hash value
+    //for other code obv i would put smth else here, but its tricky as the same input has to map to the same output so i can't just use math.random
+    public int hashCode(int k)
+    { return k; }
 }
 
 class exampleObject
