@@ -1,6 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 public class Hashing
@@ -14,8 +12,9 @@ public class Hashing
 
         hasher.initializeHashTableWithChaining();
         hasher.insertAllObjectsIntoHashTableWithChaining();
-        //hasher.testChainedInsert();
-        hasher.testChainedSearch();
+        //hasher.displayChainedHashTable();
+        //hasher.testChainedSearch();
+        hasher.testDelete();
     }
 }
 
@@ -107,7 +106,7 @@ class HashingLibrary
     }
 
     //tests that insert worked based off of
-    public void testChainedInsert()
+    public void displayChainedHashTable()
     {
         for (int i = 0; i < maxIndex; i++)
         {
@@ -167,6 +166,55 @@ class HashingLibrary
             System.out.print("not in hashtable");
         else
             System.out.print("success: " + result);
+    }
+
+    //assume x is in the hashtable to start off with
+    public void delete(exampleObject x)
+    {
+        int hashValue = hashCode(x.key);
+        exampleObjectNode LLNode = hashTableChaining[hashValue];
+
+        while(LLNode != null)
+        {
+            if (LLNode.object.key == x.key) //assume all keys are distinct
+            {
+                if (LLNode.prev == null && LLNode.next != null) //the head the LL
+                {
+                    LLNode.next.prev = null;
+                    LLNode.next = null;
+                }else if (LLNode.prev == null && LLNode.next == null) //single object, just make a new null object there
+                {
+                    LLNode.object=null;
+                }else if (LLNode.prev != null && LLNode.next == null) //the tail of the LL
+                {
+                    LLNode.prev.next = null;
+                    LLNode.prev = null;
+                }else
+                {
+                    LLNode.prev.next = LLNode.next;
+                    LLNode.next.prev = LLNode.prev;
+                    LLNode.next = null;
+                    LLNode.prev = null;
+                }
+
+                break;
+            }
+            if (LLNode.prev != null)
+                LLNode = LLNode.prev;
+        }
+    }
+
+    public void testDelete()
+    {
+        exampleObject toDelete = objectList.get((int)(Math.random()*numObjects));
+        System.out.println("to delete: " + toDelete);
+        System.out.println("before: ");
+        displayChainedHashTable();
+
+        delete(toDelete);
+        System.out.println("after: ");
+        displayChainedHashTable();
+
     }
 
     //custom implementation of the hashing function. since this is just an integer i'll just return the integer
