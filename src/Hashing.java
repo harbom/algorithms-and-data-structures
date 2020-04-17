@@ -10,10 +10,11 @@ public class Hashing
         HashingLibrary hasher = new HashingLibrary();
         hasher.initializeObjectList();
 
-        hasher.initializeDirectAddressTable();
+        //hasher.initializeDirectAddressTable();
 
         hasher.initializeHashTableWithChaining();
         hasher.insertAllObjectsIntoHashTableWithChaining();
+        //hasher.testInsert();
     }
 }
 
@@ -87,7 +88,7 @@ class HashingLibrary
     //average (not worst case) search time is O(1) now
     public void insert(exampleObject x)
     {
-        //need to insert each object at the head of the linked list at that index in the hash table
+        //need to insert each object at the tail of the linked list at that index in the hash table (tail rather than head so earlier occurrences appear earlier in the LL)
         int key = x.key;
 
         exampleObjectNode currLL = hashTableChaining[key];
@@ -102,6 +103,38 @@ class HashingLibrary
         }
 
         hashTableChaining[key] = currLL;
+    }
+
+    //tests that insert worked based off of
+    public void testInsert()
+    {
+        for (int i = 0; i < maxIndex; i++)
+        {
+            //for each key, there is a LL: need to print out the prev, curr, and next of each node in the LL;
+            exampleObjectNode currLL = hashTableChaining[i];
+            System.out.println("curr index/key: " + i);
+            while(currLL != null)
+            {
+                if (currLL.object == null) //nothing is in this LL, go to next index
+                    break;
+
+                if (currLL.prev == null)
+                    System.out.print("prev: null \t");
+                else
+                    System.out.printf("prev: %s\t",currLL.prev);
+                if (currLL.object == null)
+                    System.out.print("curr: null \t");
+                else
+                    System.out.printf("curr: %s\t",currLL.object);
+                if (currLL.next == null)
+                    System.out.print("next: null \t");
+                else
+                    System.out.printf("next: %s\t",currLL.next);
+
+                System.out.println();
+                currLL = currLL.prev;
+            }
+        }
     }
 }
 
@@ -125,8 +158,8 @@ class exampleObjectNode
     public exampleObjectNode(exampleObject x, exampleObjectNode prev)
     {
         object = x;
-        next = null;
         this.prev = prev;
+        next = null;
         prev.next = this;
     }
 
