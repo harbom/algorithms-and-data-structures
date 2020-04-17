@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Hashing
@@ -9,6 +10,7 @@ public class Hashing
         HashingLibrary tester = new HashingLibrary();
         tester.initializeObjectList();
         tester.initializeDirectAddressTable();
+        tester.initializeHashTableWithChaining();
     }
 }
 
@@ -60,6 +62,12 @@ class HashingLibrary
             System.out.println();
         }
     }
+
+    //solves collisions by having a linked list at every index
+    private void initializeHashTableWithChaining()
+    {
+
+    }
 }
 
 class exampleObject
@@ -70,5 +78,17 @@ class exampleObject
     public exampleObject(int key)
     {
         this.key = key;
+    }
+}
+
+class exampleObjectNode
+{
+    public exampleObjectNode prev;
+    public exampleObject curr;
+    public exampleObjectNode next;
+
+    public exampleObjectNode(exampleObject x)
+    {
+        curr = x;
     }
 }
