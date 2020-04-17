@@ -14,7 +14,8 @@ public class Hashing
 
         hasher.initializeHashTableWithChaining();
         hasher.insertAllObjectsIntoHashTableWithChaining();
-        //hasher.testInsert();
+        //hasher.testChainedInsert();
+        hasher.testChainedSearch();
     }
 }
 
@@ -80,13 +81,13 @@ class HashingLibrary
     public void insertAllObjectsIntoHashTableWithChaining()
     {
         for (exampleObject i:objectList)
-            insert(i);
+            chainedInsert(i);
     }
 
     //inserts a given example object into the hash table with chaining
     //solves collisions by having a linked list at every index
     //average (not worst case) search time is O(1) now
-    public void insert(exampleObject x)
+    public void chainedInsert(exampleObject x)
     {
         //need to insert each object at the tail of the linked list at that index in the hash table (tail rather than head so earlier occurrences appear earlier in the LL)
         int key = x.key;
@@ -106,7 +107,7 @@ class HashingLibrary
     }
 
     //tests that insert worked based off of
-    public void testInsert()
+    public void testChainedInsert()
     {
         for (int i = 0; i < maxIndex; i++)
         {
@@ -135,6 +136,36 @@ class HashingLibrary
                 currLL = currLL.prev;
             }
         }
+    }
+
+    //searching for a value should take O(1) **on average** (not worst case), you access/traverse the LL to find the object. else, return null
+    public exampleObject chainedSearch(int k)
+    {
+        exampleObjectNode LL = hashTableChaining[k];
+        if (LL.object == null) return null;
+
+        //need to recurr backwards from the tail
+        while (LL != null)
+        {
+            if (LL.object.key == k)
+                return LL.object;
+            LL = LL.prev;
+        }
+
+        return null;
+    }
+
+    public void testChainedSearch()
+    {
+        int randomKey = (int)(Math.random()*maxIndex);
+        System.out.println(randomKey);
+        exampleObject result = chainedSearch(randomKey);
+        if (result == null)
+            System.out.print("not in hashtable");
+        else
+            System.out.print("success: " + result);
+
+        hashCode();
     }
 }
 
