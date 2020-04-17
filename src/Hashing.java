@@ -7,10 +7,13 @@ public class Hashing
 {
     public static void main(String[] args)
     {
-        HashingLibrary tester = new HashingLibrary();
-        tester.initializeObjectList();
-        tester.initializeDirectAddressTable();
-        tester.initializeHashTableWithChaining();
+        HashingLibrary hasher = new HashingLibrary();
+        hasher.initializeObjectList();
+
+        hasher.initializeDirectAddressTable();
+
+        hasher.initializeHashTableWithChaining();
+        hasher.insertAllObjectsIntoHashTableWithChaining();
     }
 }
 
@@ -20,6 +23,7 @@ class HashingLibrary
     private int numObjects = 10;
     private List<exampleObject> objectList = new ArrayList();
     private exampleObject[] arr = new exampleObject[maxIndex];
+    private exampleObjectNode[] hashTableChaining = new exampleObjectNode[maxIndex];
 
     public void initializeObjectList()
     {
@@ -63,10 +67,41 @@ class HashingLibrary
         }
     }
 
-    //solves collisions by having a linked list at every index
-    private void initializeHashTableWithChaining()
+    //initializes all linked lists in the hash table with a null curr object, null prev and next pointers
+    public void initializeHashTableWithChaining()
     {
+        for (int i = 0; i < maxIndex; i++)
+        {
+            hashTableChaining[i] = new exampleObjectNode();
+        }
+    }
 
+    public void insertAllObjectsIntoHashTableWithChaining()
+    {
+        for (exampleObject i:objectList)
+            insert(i);
+    }
+
+    //inserts a given example object into the hash table with chaining
+    //solves collisions by having a linked list at every index
+    //average (not worst case) search time is O(1) now
+    public void insert(exampleObject x)
+    {
+        //need to insert each object at the head of the linked list at that index in the hash table
+        int key = x.key;
+
+        exampleObjectNode currLL = hashTableChaining[key];
+        //currLL either has (prev,object,null) = (null,null,null) (initial state) or (something,object,null) (need to append it to the head).
+        if (currLL.object == null)
+        {
+            //nothing is in this LL yet, assign the object and continue
+            currLL.object = x;
+        } else
+        {
+            currLL = new exampleObjectNode(x,currLL); //newLLNode.object = x, newLLNode.prev = currLL, currLL.next = newLLNode
+        }
+
+        hashTableChaining[key] = currLL;
     }
 }
 
@@ -84,11 +119,21 @@ class exampleObject
 class exampleObjectNode
 {
     public exampleObjectNode prev;
-    public exampleObject curr;
+    public exampleObject object;
     public exampleObjectNode next;
 
-    public exampleObjectNode(exampleObject x)
+    public exampleObjectNode(exampleObject x, exampleObjectNode prev)
     {
-        curr = x;
+        object = x;
+        next = null;
+        this.prev = prev;
+        prev.next = this;
+    }
+
+    public exampleObjectNode()
+    {
+        prev= null;
+        object = null;
+        next = null;
     }
 }
