@@ -1,9 +1,14 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Hashing
 {
     public static void main(String[] args)
+    {
+        //customHashTableImplementation();
+        javaHashTableStdlib();
+    }
+
+    private static void customHashTableImplementation()
     {
         HashingLibrary hasher = new HashingLibrary();
         hasher.initializeObjectList();
@@ -15,6 +20,37 @@ public class Hashing
         //hasher.displayChainedHashTable();
         //hasher.testChainedSearch();
         hasher.testDelete();
+    }
+
+    /*
+    Hashmap vs Hashtable
+    1. HashMap is non synchronized. It is not-thread safe and can’t be shared between many threads without proper
+    synchronization code whereas Hashtable is synchronized. It is thread-safe and can be shared with many threads.
+    2. HashMap allows one null key and multiple null values whereas Hashtable doesn’t allow any null key or value.
+    3. HashMap is generally preferred over HashTable if thread synchronization is not needed
+
+    Why HashTable doesn’t allow null and HashMap does?
+    To successfully store and retrieve objects from a HashTable, the objects used as keys must implement the hashCode
+    method and the equals method. Since null is not an object, it can’t implement these methods. HashMap is an advanced
+    version and improvement on the Hashtable. HashMap was created later.
+     */
+
+    //using java's implementation of java hash tables.
+    //order that the values come out is not ordered
+    private static void javaHashTableStdlib()
+    {
+        Hashtable<Integer,String> ht = new Hashtable(); //or = new Hashtable<>(), or = new Hashtable<Integer,String>()
+        ht.put(2,"three");
+        ht.put(2,"two"); //no duplicate values are stored, only two will be stored
+        ht.put(4,"four");
+        ht.put(14,"fourteen");
+        ht.put(3,"three");
+        ht.put(5,"five");
+        for (Map.Entry x : ht.entrySet())
+            System.out.println("int: " + x.getKey() + "\tvalue: " + x.getValue());
+        //can't iterate regularly, can only access entry set and value set
+
+        //ht.clear();
     }
 }
 
