@@ -5,7 +5,8 @@ public class Hashing
     public static void main(String[] args)
     {
         //customHashTableImplementation();
-        javaHashTableStdlib();
+        //javaHashTableStdlib();
+        javaHashMapStdlib();
     }
 
     private static void customHashTableImplementation()
@@ -51,6 +52,24 @@ public class Hashing
         //can't iterate regularly, can only access entry set and value set
 
         //ht.clear();
+    }
+
+    //no guarantee of being sorted, need to use treemap to sort based on key (whether it be string or integer)
+    private static void javaHashMapStdlib()
+    {
+        //remember, {thing it inherits from} x = new {thing inheriting it}();
+        HashMap<Integer,String> hm = new HashMap();
+        Map<Integer,String> hmt = new HashMap();
+
+        hm.put(3,"three");
+        hm.put(2,"three");
+        hm.put(2,"two"); //no duplicate values are stored, only two will be stored
+        hm.put(4,"four");
+        hm.put(14,"fourteen");
+        hm.put(5,"five");
+
+        for (int x :hm.keySet())
+            System.out.println("key: " + x + "\tvalue: " + hm.get(x));
     }
 }
 
