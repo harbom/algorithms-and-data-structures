@@ -5,8 +5,10 @@ public class Hashing
     public static void main(String[] args)
     {
         //customHashTableImplementation();
+
         //javaHashTableStdlib();
-        javaHashMapStdlib();
+        //javaHashMapStdlib();
+        //javaHashSetStdlib();
     }
 
     private static void customHashTableImplementation()
@@ -70,6 +72,31 @@ public class Hashing
 
         for (int x :hm.keySet())
             System.out.println("key: " + x + "\tvalue: " + hm.get(x));
+    }
+
+    //set vs a map, doesn't have a key --> value mapping but is just a set, a list of things
+    private static void javaHashSetStdlib()
+    {
+        //{thing it inherits from} x = new {thing inheriting it}();
+        HashSet<String> hs = new HashSet<>();
+        Set<String> hss = new HashSet<>();
+
+        hs.add("three");
+        hs.add("three");
+        hs.add("two"); //no duplicate values are stored, only two will be stored
+        hs.add("four");
+        hs.add("fourteen");
+        hs.add("five");
+        //again, with hashing there is no guarantee of sorted or in order storing
+
+        //standard way of printing out values
+        for (String s : hs)
+            System.out.println(s);
+
+        //another way of printing out values for a set. works over collection objects like arraylist, list, and set
+        Iterator<String> it = hs.iterator();
+        while(it.hasNext())
+            System.out.println(it.next());
     }
 }
 
